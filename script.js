@@ -13,6 +13,7 @@ let gameInterval;
 let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
 let gameRunning = false;
+let currentBgColor = '#e8e8e8'; // Store current background color
 
 // DOM elements
 const canvas = document.getElementById('game-board');
@@ -42,6 +43,9 @@ function initGame() {
     // Set initial direction
     direction = 'right';
     nextDirection = 'right';
+    
+    // Reset background color
+    currentBgColor = '#e8e8e8';
     
     // Generate first food
     generateFood();
@@ -79,6 +83,13 @@ function resetGame() {
 function gameLoop() {
     update();
     draw();
+}
+
+// Generate a random color for background
+function getRandomColor() {
+    // Generate pastel colors that are light enough for good contrast
+    const hue = Math.floor(Math.random() * 360);
+    return `hsl(${hue}, 70%, 85%)`;
 }
 
 // Update game state
@@ -127,6 +138,9 @@ function update() {
             localStorage.setItem('snakeHighScore', highScore);
         }
         
+        // Change background color
+        currentBgColor = getRandomColor();
+        
         // Generate new food
         generateFood();
     } else {
@@ -137,8 +151,8 @@ function update() {
 
 // Draw game elements
 function draw() {
-    // Clear canvas
-    ctx.fillStyle = '#e8e8e8';
+    // Clear canvas with current background color
+    ctx.fillStyle = currentBgColor;
     ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     
     // Draw snake
